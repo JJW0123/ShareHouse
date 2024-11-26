@@ -1,24 +1,34 @@
 package com.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.DTO.UserDTO;
+import com.example.demo.entity.UserEntity;
 import com.example.demo.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequiredArgsConstructor // final로 선언된 생성자 생성해주는 어노테이션
+@RequiredArgsConstructor
 public class MainController {
 
-    private final UserService userService;
+    // 여기부터
 
-    @GetMapping("/main")
-    public String main() {
-        return "index";
+    // 하우스 등록
+    @GetMapping("/reserve")
+    public String reserve() {
+        return "reserve";
+    }
+
+    // 하우스 조회
+    @GetMapping("/search")
+    public String search() {
+        return "search";
     }
 
     @GetMapping("/login")
@@ -31,29 +41,43 @@ public class MainController {
         return "signup";
     }
 
-    @GetMapping("/about")
-    public String about() {
-        return "about";
+    @GetMapping("/house_detail")
+    public String house_detail() {
+        return "house_detail";
     }
 
-    @GetMapping("/properties")
-    public String properties() {
-        return "properties";
+    private final UserService userService;
+
+    // 여기부터
+    @GetMapping("/")
+    public String home(HttpSession session, Model model) {
+        // 세션에서 로그인 정보 가져오기
+        UserEntity loginUser = (UserEntity) session.getAttribute("loginUser");
+        if (loginUser != null) {
+            model.addAttribute("isLoggedIn", true);
+            model.addAttribute("userName", loginUser.getName()); // 로그인 사용자 이름
+        } else {
+            model.addAttribute("isLoggedIn", false);
+        }
+        return "index";
     }
 
-    @GetMapping("/property_single")
-    public String property_single() {
-        return "property-single";
+    @PostMapping("/login")
+    public String login(String userId, String userPassword, HttpSession session) {
+        UserEntity user = userService.login(userId, userPassword);
+
+        if (user == null) {
+            return "login"; // 로그인 실패
+        }
+
+        session.setAttribute("loginUser", user); // 로그인 사용자 정보를 세션에 저장
+        return "redirect:/";
     }
 
-    @GetMapping("/contact")
-    public String contact() {
-        return "contact";
-    }
-
-    @GetMapping("/services")
-    public String services() {
-        return "services";
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 
     @PostMapping("/signup")
