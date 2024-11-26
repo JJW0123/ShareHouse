@@ -12,9 +12,11 @@ import com.example.demo.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MainController {
 
     // 여기부터

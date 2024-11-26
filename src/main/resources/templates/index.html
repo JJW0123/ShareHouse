@@ -48,12 +48,12 @@
 
           <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
             <div th:if="${isLoggedIn}">
-              <p>Hello, <span th:text="${userName}"></span>!</p>
-              <a href="/logout">Logout</a>
+              <a href="#">반갑습니다, <span th:text="${userName}"></span>님</a>
+              <a href="/logout">로그아웃</a>
             </div>
             <div th:if="${!isLoggedIn}">
-              <p>Hello, Guest!</p>
-              <a href="/login">Login</a>
+              <a href="#">반갑습니다.</a>
+              <a href="/login">로그인</a>
             </div>
             <li class="active"><a href="/">메인화면</a></li>
             <li><a href="/reserve">쉐어하우스 등록</a></li>
@@ -66,7 +66,6 @@
               </ul>
             </li>
             <li><a href="/signup">회원가입</a></li>
-            <li><a href="/login">로그인</a></li>
           </ul>
 
           <a href="#"

@@ -87,7 +87,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-          <form action="#">
+          <form action="/reserve" method="post" enctype="multipart/form-data">
             <div class="row">
               <div class="col-lg-12">
                 <h2 class="font-weight-bold text-primary heading">
@@ -95,19 +95,16 @@
                 </h2>
               </div>
               <div class="col-6 mb-3">
-                <input type="text" class="form-control" placeholder="시/도" />
+                <input type="text" name=first_addr class="form-control" placeholder="시/도" />
               </div>
               <div class="col-6 mb-3">
-                <input type="email" class="form-control" placeholder="시/군/구" />
+                <input type="text" name=second_addr class="form-control" placeholder="시/군/구" />
               </div>
               <div class="col-6 mb-3">
-                <input type="text" class="form-control" placeholder="읍/면" />
+                <input type="text" name=third_addr class="form-control" placeholder="도로명 + 건물번호" />
               </div>
               <div class="col-6 mb-3">
-                <input type="email" class="form-control" placeholder="도로명 + 건물번호" />
-              </div>
-              <div class="col-12 mb-3">
-                <input type="text" class="form-control" placeholder="상세주소" />
+                <input type="text" name=fourth_addr class="form-control" placeholder="상세주소" />
               </div>
               <div class="col-lg-12">
                 <h2 class="font-weight-bold text-primary heading">
@@ -115,13 +112,13 @@
                 </h2>
               </div>
               <div class="col-12 mb-3">
-                <input type="text" class="form-control" placeholder="건물명" />
+                <input type="text" name="houseName" class="form-control" placeholder="건물명" />
               </div>
               <div class="col-6 mb-3">
-                <input type="email" class="form-control" placeholder="평수(m²)" />
+                <input type="text" name="houseArea" class="form-control" placeholder="평수(m²)" />
               </div>
               <div class="col-6 mb-3">
-                <input type="email" class="form-control" placeholder="입주 인원(최대)" />
+                <input type="text" name="housePerson_count" class="form-control" placeholder="입주 인원(최대)" />
               </div>
               <div class="col-lg-12">
                 <h2 class="font-weight-bold text-primary heading">
@@ -129,10 +126,10 @@
                 </h2>
               </div>
               <div class="col-6 mb-3">
-                <input type="email" class="form-control" placeholder="보증금(만원)" />
+                <input type="text" name="houseDeposit" class="form-control" placeholder="보증금(만원)" />
               </div>
               <div class="col-6 mb-3">
-                <input type="email" class="form-control" placeholder="월세(만원)" />
+                <input type="text" name="houseMonthly_rent" class="form-control" placeholder="월세(만원)" />
               </div>
               <div class="col-lg-12">
                 <h2 class="font-weight-bold text-primary heading">
@@ -140,7 +137,8 @@
                 </h2>
               </div>
               <div class="col-12 mb-3">
-                <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="기타 설명"></textarea>
+                <textarea name="houseDescription" cols="30" rows="7" class="form-control"
+                  placeholder="기타 설명"></textarea>
               </div>
               <div class="col-lg-12">
                 <h2 class="font-weight-bold text-primary heading">
@@ -148,7 +146,7 @@
                 </h2>
               </div>
               <div>
-                <input type="file" id="housePhoto" multiple />
+                <input type="file" name="housePhoto" multiple />
                 <h2></h2>
               </div>
               <div class="col-12">

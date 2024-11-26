@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +22,8 @@ public class AwsS3Controller {
     private final AwsS3Service awsS3Service;
 
     @PostMapping
-    public ResponseEntity<String> uploadFile(MultipartFile multipartFile) {
-        return ResponseEntity.ok((awsS3Service.uploadFile(multipartFile)));
+    public ResponseEntity<List<String>> uploadFiles(List<MultipartFile> multipartFile) {
+        return ResponseEntity.ok((awsS3Service.uploadFiles(multipartFile)));
     }
 
     @DeleteMapping
