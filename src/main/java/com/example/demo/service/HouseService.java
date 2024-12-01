@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.HouseDTO;
@@ -18,5 +21,24 @@ public class HouseService {
         HouseEntity houseEntity = HouseEntity.toHouseEntity(houseDTO);
         houseRep.save(houseEntity);
         return houseEntity.getId();
+    }
+
+    // 모든 하우스 DB 불러오기
+    public List<HouseDTO> getAllHouses() {
+        // findAll로 DB에서 모든 하우스 불러오고
+        List<HouseEntity> houseEntityList = houseRep.findAll();
+
+        // DTO로 형변환
+        List<HouseDTO> houseDTOs = houseEntityList.stream().map(HouseDTO::toHouseDTO).collect(Collectors.toList());
+
+        return houseDTOs;
+    }
+
+    // 하나의 하우스 DB 불러오기
+    public HouseDTO getOneHouse(Long houseId) {
+        HouseEntity houseEntity = houseRep.findById(houseId);
+        HouseDTO houseDTO = HouseDTO.toHouseDTO(houseEntity);
+
+        return houseDTO;
     }
 }

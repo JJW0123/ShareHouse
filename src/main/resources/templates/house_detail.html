@@ -11,7 +11,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="author" content="Untree.co" />
-  <link rel="shortcut icon" href="favicon.png" />
+  <link rel="shortcut icon" th:href="@{/favicon.png}" />
 
   <meta name="description" content="" />
   <meta name="keywords" content="bootstrap, bootstrap5" />
@@ -20,12 +20,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="fonts/icomoon/style.css" />
-  <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css" />
+  <!-- thymleaf로 상대경로 설정해주기(/detail/~ 로 요청되는 css 경로 수정) -->
+  <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}" />
+  <link rel="stylesheet" th:href="@{/fonts/flaticon/font/flaticon.css}" />
 
-  <link rel="stylesheet" href="css/tiny-slider.css" />
-  <link rel="stylesheet" href="css/aos.css" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" th:href="@{/css/tiny-slider.css}" />
+  <link rel="stylesheet" th:href="@{/css/aos.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
 
   <title>
     Property &mdash; Free Bootstrap 5 Website Template by Untree.co
@@ -50,7 +51,7 @@
 
           <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
             <li><a href="/">메인화면</a></li>
-            <li><a href="/reserve">쉐어하우스 등록</a></li>
+            <li><a href="/register">쉐어하우스 등록</a></li>
             <li class="active"><a href="/search">쉐어하우스 조회</a></li>
             <li class="has-children">
               <a href="/properties">마이페이지</a>
@@ -73,25 +74,12 @@
     </div>
   </nav>
 
-  <div class="hero page-inner overlay" style="background-image: url('images/hero_bg_3.jpg')">
+  <div class="hero hero-smaller overlay" th:style="'background-image: url(' + @{${houseInfo.img_url_list[0]}} + ')'">
     <div class="container">
       <div class="row justify-content-center align-items-center">
         <div class="col-lg-9 text-center mt-5">
-          <h1 class="heading" data-aos="fade-up">
-            5232 California AVE. 21BC
+          <h1 class="heading" data-aos="fade-up" th:text="${houseInfo.houseName}">
           </h1>
-
-          <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
-            <ol class="breadcrumb text-center justify-content-center">
-              <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item">
-                <a href="/properties">Properties</a>
-              </li>
-              <li class="breadcrumb-item active text-white-50" aria-current="page">
-                5232 California AVE. 21BC
-              </li>
-            </ol>
-          </nav>
         </div>
       </div>
     </div>
@@ -102,21 +90,19 @@
       <div class="row justify-content-between">
         <div class="col-lg-7">
           <div class="img-property-slide-wrap">
-            <div class="img-property-slide">
-              <img src="images/img_1.jpg" alt="Image" class="img-fluid" />
-              <img src="images/img_2.jpg" alt="Image" class="img-fluid" />
-              <img src="images/img_3.jpg" alt="Image" class="img-fluid" />
+            <div class="img-property-slide">>
+              <img th:each="imgUrl : ${houseInfo.img_url_list}" th:src="@{${imgUrl}}" alt="Image" class="img-fluid" />
             </div>
           </div>
         </div>
         <div class="col-lg-4">
-          <h2 class="heading text-primary">하우스 01</h2>
-          <h6 class="mb-0">보증금 / 월세</h6>
-          <p class="meta">상세 주소</p>
-          <p class="text-black-50">
-            하우스 소개 01 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione
-            laborum quo quos omnis sed magnam id, ducimus saepe, debitis error
-            earum, iste dicta odio est sint dolorem magni animi tenetur.
+          <h2 class="heading text-primary" th:text="${houseInfo.houseName}"></h2>
+          <h6 class="mb-0"
+            th:text="${'보증금: ' + houseInfo.houseDeposit + '만원 / 월세: ' + houseInfo.houseMonthly_rent + '만원'}"></h6>
+          <p class="meta"
+            th:text="${houseInfo.first_addr + ' ' + houseInfo.second_addr + ' ' + houseInfo.third_addr + ' ' + houseInfo.fourth_addr}">
+          </p>
+          <p class="text-black-50" th:text="${houseInfo.houseDescription}">
           </p>
 
           <div class="d-block agent-box p-5">
@@ -128,6 +114,11 @@
               </p>
             </div>
           </div>
+          <form th:action="@{/reserve}" method="post">
+            <input type="hidden" name="houseId" th:value="${houseInfo.houseId}" />
+            <input type="hidden" name="userId" th:value="${session.userId}" />
+            <button type="submit" class="btn btn-primary py-2 px-5 mt-3">예약하기</button>
+          </form>
         </div>
       </div>
     </div>
@@ -169,12 +160,13 @@
     </div>
   </div>
 
-  <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="js/tiny-slider.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/navbar.js"></script>
-  <script src="js/counter.js"></script>
-  <script src="js/custom.js"></script>
+  <!-- thymleaf로 상대경로 설정해주기 -->
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/tiny-slider.js}"></script>
+  <script th:src="@{/js/aos.js}"></script>
+  <script th:src="@{/js/navbar.js}"></script>
+  <script th:src="@{/js/counter.js}"></script>
+  <script th:src="@{/js/custom.js}"></script>
 </body>
 
 </html>

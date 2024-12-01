@@ -16,15 +16,10 @@ import lombok.Setter;
 public class UserEntity {
     @Id
     private String id;
-
     private String password;
-
     private String name;
-
     private String phone;
-
     private Long reserved_house;
-
     private Long registered_house;
 
     @Builder

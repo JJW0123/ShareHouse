@@ -47,16 +47,15 @@ public class AwsS3Service {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
             }
         }
-
         return fileUrlList;
     }
 
-    // 파일명을 난수화하기 위해 UUID 를 활용하여 난수를 돌린다.
+    // 파일명은 중복 방지를 위해 UUID 사용
     public String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
-    // "."의 존재 유무만 판단
+    // 파일 확장자가 있는지 확인
     private String getFileExtension(String fileName) {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
@@ -65,6 +64,7 @@ public class AwsS3Service {
         }
     }
 
+    // 파일 이름 받아와서 파일 삭제
     public void deleteFile(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         System.out.println(bucket);

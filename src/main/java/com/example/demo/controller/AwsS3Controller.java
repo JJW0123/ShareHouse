@@ -14,9 +14,10 @@ import com.example.demo.service.AwsS3Service;
 
 import lombok.RequiredArgsConstructor;
 
+// TODO:추후 삭제하기
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/test/file")
+@RequestMapping("/test/file") // 파일 업로드, 삭제 테스트용 Url
 public class AwsS3Controller {
 
     private final AwsS3Service awsS3Service;

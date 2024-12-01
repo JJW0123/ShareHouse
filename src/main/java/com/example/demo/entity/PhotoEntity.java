@@ -17,17 +17,15 @@ public class PhotoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String path;
-
-    private Long house_id;
+    private Long houseId;
 
     @Builder
-    public static PhotoEntity toPhotoEntity(String path, Long house_id) {
+    public static PhotoEntity toPhotoEntity(String path, Long houseId) {
         PhotoEntity photoEntity = new PhotoEntity();
 
         photoEntity.path = path;
-        photoEntity.house_id = house_id;
+        photoEntity.houseId = houseId;
 
         return photoEntity;
     }

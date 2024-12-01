@@ -12,26 +12,25 @@ import com.example.demo.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
+// TODO: url 경로 다듬기
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 public class MainController {
 
     // 여기부터
 
     // 하우스 등록
-    @GetMapping("/reserve")
-    public String reserve() {
-        return "reserve";
+    @GetMapping("/register")
+    public String register() {
+        return "register";
     }
 
-    // 하우스 조회
-    @GetMapping("/search")
-    public String search() {
-        return "search";
-    }
+    // // 하우스 조회
+    // @GetMapping("/search")
+    // public String search() {
+    // return "search";
+    // }
 
     @GetMapping("/login")
     public String login() {
@@ -50,13 +49,13 @@ public class MainController {
 
     private final UserService userService;
 
-    // 여기부터
     @GetMapping("/")
     public String home(HttpSession session, Model model) {
         // 세션에서 로그인 정보 가져오기
         UserEntity loginUser = (UserEntity) session.getAttribute("loginUser");
         if (loginUser != null) {
             model.addAttribute("isLoggedIn", true);
+            // TODO: index.html 유저 이름 디자인 수정
             model.addAttribute("userName", loginUser.getName()); // 로그인 사용자 이름
         } else {
             model.addAttribute("isLoggedIn", false);
