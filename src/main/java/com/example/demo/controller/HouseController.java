@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.DTO.HouseDTO;
+import com.example.demo.DTO.ReservationDTO;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.AwsS3Service;
 import com.example.demo.service.HouseService;
 import com.example.demo.service.PhotoService;
 import com.example.demo.service.ReservationService;
+import com.example.demo.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-// TODO: Controller 별 url 경로 다듬기
 // url requestMapping 추가 시 css 파일 경로를 thymeleaf 상대경로로 바꿔주기
 @Controller
 @RequiredArgsConstructor
@@ -31,13 +32,16 @@ public class HouseController {
     private final HouseService houseService;
     private final PhotoService photoService;
     private final AwsS3Service awsS3Service;
+    private final UserService userService;
     private final ReservationService reservationService;
 
     // 하우스 등록 페이지(GET)
     @GetMapping("/register")
-    public String register(HttpSession session) {
+    public String register(HttpSession session, Model model) {
 
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+        model.addAttribute("isLoggedIn", userEntity != null);
+
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
         if (userEntity == null) {
             return "redirect:/login";
@@ -77,7 +81,10 @@ public class HouseController {
 
     // 하우스 조회 페이지(GET)
     @GetMapping("/search")
-    public String getHouseInfo(Model model) {
+    public String getHouseInfo(HttpSession session, Model model) {
+        UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+        model.addAttribute("isLoggedIn", userEntity != null);
+
         // 데이터베이스에서 모든 하우스 데이터를 가져옴
         List<HouseDTO> houseDTOList = houseService.getAllHouses();
 
@@ -93,15 +100,30 @@ public class HouseController {
     }
 
     // TODO: 텍스트 디자인 수정하기
+    // TODO: 평수, 인원 표시하기
     // 하우스 상세 조회 페이지(GET)
     @GetMapping("/detail/{house_id}")
-    public String getHouseDetail(Model model, @PathVariable("house_id") Long house_id) {
+    public String getHouseDetail(Model model, @PathVariable("house_id") Long house_id, HttpSession session) {
+
+        // 하우스 정보 받아오기
         HouseDTO houseDTO = houseService.getOneHouse(house_id);
-
         houseDTO.setImg_url_list(photoService.getAllPhotoUrl(houseDTO.getHouseId()));
-
         model.addAttribute("houseInfo", houseDTO);
 
+        // 로그인 여부 확인
+        UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+        model.addAttribute("isLoggedIn", userEntity != null);
+
+        // 조회하는 유저가 하우스 주인이라면 예약 현황 표시
+        if (userEntity != null && userEntity.getId().equals(houseDTO.getOwnerId())) {
+            List<ReservationDTO> reservations = reservationService.getAllByHouseId(house_id);
+            for (ReservationDTO reservationEntity : reservations) {
+                UserEntity user = userService.getUser(reservationEntity.getUserId());
+                reservationEntity.setUserPhone(user.getPhone());
+                reservationEntity.setUserName(user.getName());
+            }
+            model.addAttribute("reservations", reservations);
+        }
         return "house_detail";
     }
 
@@ -135,5 +157,4 @@ public class HouseController {
     }
 
     // TODO: 도로명, 시/도 검색 추가하기
-    // TODO: index.html의 페이지네이션 삭제함 오류없나 확인할 것
 }

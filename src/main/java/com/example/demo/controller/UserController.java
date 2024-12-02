@@ -22,7 +22,6 @@ import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-// TODO: url 경로 다듬기
 // 로그인과 마이페이지의 기능을 담당하는 컨트롤러
 @Controller
 @RequiredArgsConstructor
@@ -40,15 +39,18 @@ public class UserController {
 
     // 로그인(POST)
     @PostMapping("/login")
-    public String login(String userId, String userPassword, HttpSession session) {
+    public String login(String userId, String userPassword, HttpSession session, Model model) {
         UserEntity user = userService.login(userId, userPassword);
 
-        // TODO: 로긴 실패 알림 띄우기
+        // 로그인 실패시 알림 띄우기
         if (user == null) {
-            return "login"; // 로그인 실패
+            model.addAttribute("message", "아이디나 비밀번호가 틀렸습니다.");
+            model.addAttribute("redirectUrl", "/login");
+            return "alert";
         }
 
-        session.setAttribute("loginUser", user); // 로그인 사용자 정보를 세션에 저장
+        // 로그인 유저는 세션에 저장
+        session.setAttribute("loginUser", user);
         return "redirect:/";
     }
 
@@ -67,17 +69,28 @@ public class UserController {
 
     // 회원가입(POST)
     @PostMapping("/signup")
-    public String signup(@ModelAttribute UserDTO userDTO) {
-        // save 함수는 업데이트도 겸하고 있음
+    public String signup(@ModelAttribute UserDTO userDTO, Model model) {
+
+        // 아이디 중복 예외처리
+        if (userService.checkIdDuplicate(userDTO.getUserId())) {
+            model.addAttribute("message", "이미 존재하는 아이디입니다.");
+            model.addAttribute("redirectUrl", "/signup");
+            return "alert";
+        }
+
+        // 예외처리 통과하면 저장
         userService.save(userDTO);
-        // TODO: 아이디 중복일 경우 제약조건 추가하기
-        return "redirect:/";
+
+        model.addAttribute("message", "회원가입에 성공했습니다.");
+        model.addAttribute("redirectUrl", "/");
+        return "alert";
     }
 
     // 마이페이지 - 예약한 하우스 조회 페이지(GET)
     @GetMapping("/mypage_reservation")
     public String reservation(HttpSession session, Model model) {
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+        model.addAttribute("isLoggedIn", userEntity != null);
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
         if (userEntity == null) {
@@ -109,6 +122,7 @@ public class UserController {
     public String cancelReservation(HttpSession session, Model model) {
         // 세션에서 유저 아이디 받아와 예약 취소하기
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+
         reservationService.delete(userEntity.getId());
 
         // 예약 취소 성공 메세지 띄우고 메인화면으로 리다이렉트
@@ -121,6 +135,7 @@ public class UserController {
     @GetMapping("/mypage_registration")
     public String registration(HttpSession session, Model model) {
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+        model.addAttribute("isLoggedIn", userEntity != null);
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
         if (userEntity == null) {
@@ -156,6 +171,4 @@ public class UserController {
         model.addAttribute("redirectUrl", "/");
         return "alert";
     }
-
-    // 예약한 유저 현황 확인 가능하게 하기
 }

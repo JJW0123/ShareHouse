@@ -44,4 +44,8 @@ public class UserService {
 
         return user;
     }
+
+    public UserEntity getUser(String id) {
+        return userRep.findById(id).get();
+    }
 }

@@ -9,9 +9,7 @@ import com.example.demo.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-// TODO: url 경로 다듬기
-// TODO: 메인 UI의 "property" 아이콘과 title, favicon 등 수정하기, 마이페이지 하이퍼링크 수정
-// TODO: html 사이드 메뉴의 하이퍼링크 수정
+// TODO: favicon 수정하기
 
 @Controller
 @RequiredArgsConstructor
