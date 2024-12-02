@@ -12732,7 +12732,7 @@ textarea {
 }
 .hero,
 .hero > .container > .row {
-  height: 70vh;
+  height: 100vh;
   min-height: 300px;
 }
 .hero.page-inner,
@@ -12808,7 +12808,7 @@ textarea {
   right: 0;
 }
 .hero-slide .img {
-  height: 70vh;
+  height: 100vh;
   min-height: 300px;
   background-size: cover;
   background-repeat: no-repeat;

@@ -46,21 +46,21 @@
     <div class="container">
       <div class="menu-bg-wrap">
         <div class="site-navigation">
-          <a href="/" class="logo m-0 float-start">Property</a>
+          <a href="/" class="logo m-0 float-start">Share House</a>
 
           <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
             <li><a href="/">메인화면</a></li>
             <li><a href="/register">쉐어하우스 등록</a></li>
-            <li><a href="/search">쉐어하우스 조회</a></li>
+            <li class="active"><a href="/search">쉐어하우스 조회</a></li>
             <li class="has-children">
-              <a>마이페이지</a>
+              <a href="/properties">마이페이지</a>
               <ul class="dropdown">
                 <li><a href="#">등록한 쉐어하우스</a></li>
                 <li><a href="#">예약한 쉐어하우스</a></li>
               </ul>
             </li>
             <li><a href="/signup">회원가입</a></li>
-            <li class="active"><a href="/login">로그인</a></li>
+            <li><a href="/login">로그인</a></li>
           </ul>
 
           <a href="#"
@@ -77,39 +77,59 @@
     <div class="container">
       <div class="row justify-content-center align-items-center">
         <div class="col-lg-9 text-center mt-5">
-          <h1 class="heading" data-aos="fade-up">로그인</h1>
+          <h1 class="heading" data-aos="fade-up">예약한 쉐어하우스</h1>
 
           <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
-            <ol class="breadcrumb text-center justify-content-center"></ol>
+            <ol class="breadcrumb text-center justify-content-center">
+            </ol>
           </nav>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="section">
+  <div class="section section-properties">
     <div class="container">
       <div class="row">
-        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-          <form action="/login" method="post">
-            <div class="row">
-              <div class="col-12 mb-3">
-                <input type="text" class="form-control" name="userId" placeholder="아이디" />
-              </div>
-              <div class="col-12 mb-3">
-                <input type="text" class="form-control" name="userPassword" placeholder="비밀번호" />
-              </div>
 
-              <div class="col-12">
-                <input type="submit" value="로그인" class="btn btn-primary" />
+        <!--    ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ    -->
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <div class="property-item mb-30" th:if="${house != null}">
+            <a th:href="'/property_single/' + ${house.houseId}" class="img">
+              <img th:src="${house.img_url}" alt="Image" class="img-fluid" />
+            </a>
+
+            <div class="property-content">
+              <div class="price mb-2">
+                <span th:text="${'보증금: ' + house.houseDeposit + '만원 / 월세: ' + house.houseMonthly_rent + '만원'}"></span>
+              </div>
+              <div>
+                <span class="city mb-3" th:text="${house.houseName}"></span>
+                <span class="d-block mb-2 text-black-50"
+                  th:text="${house.first_addr + ' ' + house.second_addr + ' ' + house.third_addr + ' ' + house.fourth_addr}"></span>
+
+                <div class="specs d-flex mb-4">
+                  <span class="d-block d-flex align-items-center me-3">
+                    <span class="icon-home me-2"></span>
+                    <span class="caption" th:text="${house.houseArea + 'm²'}"></span>
+                  </span>
+                  <span class="d-block d-flex align-items-center">
+                    <span class="icon-person me-2"></span>
+                    <span class="caption" th:text="${house.housePerson_count + '명'}"></span>
+                  </span>
+                </div>
+
+                <a th:href="'/detail/' + ${house.houseId}" class="btn btn-primary py-2 px-3">자세히</a>
+                <a href="/cancelReservation" class="btn btn-primary py-2 px-3">예약 취소</a>
               </div>
             </div>
-          </form>
+          </div>
+
         </div>
+        <!--    ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ    -->
       </div>
     </div>
   </div>
-  <!-- /.untree_co-section -->
 
   <div class="site-footer">
     <div class="container">

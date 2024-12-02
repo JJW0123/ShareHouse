@@ -19,8 +19,6 @@ public class UserEntity {
     private String password;
     private String name;
     private String phone;
-    private Long reserved_house;
-    private Long registered_house;
 
     @Builder
     public static UserEntity toUserEntity(UserDTO userDTO) {

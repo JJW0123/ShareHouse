@@ -44,4 +44,9 @@ public class UserService {
 
         return user;
     }
+
+    // 하우스 예약
+    public void reservation(String UserId, Long houseId) {
+
+    }
 }

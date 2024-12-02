@@ -30,6 +30,8 @@ public class HouseDTO {
     // 하우스 이미지 전부(AWS S3 url)
     private List<String> img_url_list;
 
+    private String owner;
+
     public static HouseDTO toHouseDTO(HouseEntity houseEntity) {
         HouseDTO houseDTO = new HouseDTO();
 

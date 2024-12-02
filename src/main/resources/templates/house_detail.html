@@ -116,7 +116,6 @@
           </div>
           <form th:action="@{/reserve}" method="post">
             <input type="hidden" name="houseId" th:value="${houseInfo.houseId}" />
-            <input type="hidden" name="userId" th:value="${session.userId}" />
             <button type="submit" class="btn btn-primary py-2 px-5 mt-3">예약하기</button>
           </form>
         </div>
