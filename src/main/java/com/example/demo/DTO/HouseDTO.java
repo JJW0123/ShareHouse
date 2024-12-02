@@ -30,7 +30,7 @@ public class HouseDTO {
     // 하우스 이미지 전부(AWS S3 url)
     private List<String> img_url_list;
 
-    private String owner;
+    private String ownerId;
 
     public static HouseDTO toHouseDTO(HouseEntity houseEntity) {
         HouseDTO houseDTO = new HouseDTO();
@@ -47,6 +47,8 @@ public class HouseDTO {
         houseDTO.setSecond_addr(houseEntity.getSecond_addr());
         houseDTO.setThird_addr(houseEntity.getThird_addr());
         houseDTO.setFourth_addr(houseEntity.getFourth_addr());
+
+        houseDTO.setOwnerId(houseEntity.getOwnerId());
 
         return houseDTO;
     }

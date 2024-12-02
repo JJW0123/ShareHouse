@@ -31,6 +31,8 @@ public class HouseEntity {
     private String third_addr;
     private String fourth_addr;
 
+    private String ownerId;
+
     @Builder
     public static HouseEntity toHouseEntity(HouseDTO houseDTO) {
         HouseEntity houseEntity = new HouseEntity();
@@ -47,6 +49,8 @@ public class HouseEntity {
         houseEntity.second_addr = houseDTO.getSecond_addr();
         houseEntity.third_addr = houseDTO.getThird_addr();
         houseEntity.fourth_addr = houseDTO.getFourth_addr();
+
+        houseEntity.ownerId = houseDTO.getOwnerId();
 
         return houseEntity;
     }

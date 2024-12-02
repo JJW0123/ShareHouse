@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.DTO.HouseDTO;
@@ -41,6 +43,7 @@ public class UserController {
     public String login(String userId, String userPassword, HttpSession session) {
         UserEntity user = userService.login(userId, userPassword);
 
+        // TODO: 로긴 실패 알림 띄우기
         if (user == null) {
             return "login"; // 로그인 실패
         }
@@ -113,6 +116,46 @@ public class UserController {
         model.addAttribute("redirectUrl", "/");
         return "alert";
     }
-    // TODO: 마이페이지 등록한 하우스 페이지 완성하기(예약한 유저 불러오기)
 
+    // 마이페이지 - 등록한 하우스 조회 페이지(GET)
+    @GetMapping("/mypage_registration")
+    public String registration(HttpSession session, Model model) {
+        UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+
+        // 로그인하지 않은 상태라면 로그인 페이지로 이동
+        if (userEntity == null) {
+            return "redirect:/login";
+        }
+        // 등록한 하우스 불러오기
+        Optional<List<HouseDTO>> houseDTOList = houseService.getAllHouseByOwnerId(userEntity.getId());
+
+        // 등록한 하우스 없을 경우 예외처리
+        if (houseDTOList.isEmpty()) {
+            model.addAttribute("message", "등록한 하우스가 없습니다.");
+            model.addAttribute("redirectUrl", "/");
+            return "alert";
+        }
+
+        // S3에서 이미지 URL 받아와서 DTO에 넣기
+        for (HouseDTO houseDTO : houseDTOList.get()) {
+            houseDTO.setImg_url(photoService.getPhotoUrl(houseDTO.getHouseId()));
+        }
+
+        // 모델에 DTO 추가
+        model.addAttribute("houseList", houseDTOList.get());
+
+        return "mypage_registration";
+    }
+
+    // 마이페이지 - 등록 취소
+    @GetMapping("/cancelRegistration/{houseId}")
+    public String cancelRegistration(@PathVariable("houseId") Long houseId, Model model) {
+        houseService.delete(houseId);
+
+        model.addAttribute("message", "하우스 등록을 취소했습니다.");
+        model.addAttribute("redirectUrl", "/");
+        return "alert";
+    }
+
+    // 예약한 유저 현황 확인 가능하게 하기
 }

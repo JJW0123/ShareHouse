@@ -56,7 +56,7 @@ public class HouseController {
 
         // 세션에서 id 받아와 하우스 주인으로 저장
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        houseDTO.setOwner(userEntity.getId());
+        houseDTO.setOwnerId(userEntity.getId());
 
         // 하우스DTO 저장하고 id 반환
         Long houseId = houseService.save(houseDTO);
@@ -69,10 +69,9 @@ public class HouseController {
             photoService.save(fileUrl, houseId);
         }
 
-        // TODO: 마이페이지 - 등록 으로 리다이렉트하기
-        // 등록 성공 메세지 띄우고 메인화면으로 리다이렉트
+        // 등록 성공 메세지 띄우고 마이페이지 - 등록한 하우스로 리다이렉트
         model.addAttribute("message", "성공적으로 등록 되었습니다.");
-        model.addAttribute("redirectUrl", "/");
+        model.addAttribute("redirectUrl", "/mypage_registration");
         return "alert";
     }
 
@@ -135,5 +134,6 @@ public class HouseController {
         return "alert";
     }
 
-    // TODO: 페이지 삭제하고 도로명, 시/도 검색 추가하기
+    // TODO: 도로명, 시/도 검색 추가하기
+    // TODO: index.html의 페이지네이션 삭제함 오류없나 확인할 것
 }
