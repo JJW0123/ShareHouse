@@ -9,8 +9,6 @@ import com.example.demo.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-// TODO: favicon 수정하기
-
 @Controller
 @RequiredArgsConstructor
 public class MainController {

@@ -90,7 +90,10 @@ public class UserController {
     @GetMapping("/mypage_reservation")
     public String reservation(HttpSession session, Model model) {
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        model.addAttribute("isLoggedIn", userEntity != null);
+        if (userEntity != null) {
+            model.addAttribute("isLoggedIn", true);
+            model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
+        }
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
         if (userEntity == null) {
@@ -135,7 +138,10 @@ public class UserController {
     @GetMapping("/mypage_registration")
     public String registration(HttpSession session, Model model) {
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        model.addAttribute("isLoggedIn", userEntity != null);
+        if (userEntity != null) {
+            model.addAttribute("isLoggedIn", true);
+            model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
+        }
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
         if (userEntity == null) {

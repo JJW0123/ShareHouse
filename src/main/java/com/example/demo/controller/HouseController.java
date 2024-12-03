@@ -41,7 +41,10 @@ public class HouseController {
     public String register(HttpSession session, Model model) {
 
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        model.addAttribute("isLoggedIn", userEntity != null);
+        if (userEntity != null) {
+            model.addAttribute("isLoggedIn", true);
+            model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
+        }
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
         if (userEntity == null) {
@@ -85,7 +88,11 @@ public class HouseController {
     public String search(@RequestParam(value = "keyword", required = false) String keyword, HttpSession session,
             Model model) {
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        model.addAttribute("isLoggedIn", userEntity != null);
+        if (userEntity != null) {
+            model.addAttribute("isLoggedIn", true);
+            model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
+        }
+
         List<HouseDTO> houseDTOList;
         if (keyword == null || keyword.isEmpty()) {
             // 데이터베이스에서 모든 하우스 데이터를 가져옴
@@ -115,34 +122,6 @@ public class HouseController {
         return "search";
     }
 
-    // // 하우스 조회 페이지 - 시/도 또는 도로명 검색(GET)
-    // @GetMapping("/search/{keyword}")
-    // public String searchByKeyword(@PathVariable String keyword, HttpSession
-    // session, Model model) {
-    // UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-    // model.addAttribute("isLoggedIn", userEntity != null);
-
-    // // 데이터베이스에서 키워드로 하우스 데이터를 가져옴
-    // Optional<List<HouseDTO>> houseDTOList =
-    // houseService.getAllHouseByKeyword(keyword);
-
-    // // 키워드에 해당하는 하우스가 없다면 경고창 띄우기
-    // if (houseDTOList.isEmpty()) {
-    // model.addAttribute("message", "조건에 맞는 하우스가 없습니다.");
-    // model.addAttribute("redirectUrl", "/");
-    // return "alert";
-    // }
-    // // S3에서 이미지 URL 받아와서 DTO에 넣기
-    // for (HouseDTO houseDTO : houseDTOList.get()) {
-    // houseDTO.setImg_url(photoService.getPhotoUrl(houseDTO.getHouseId()));
-    // }
-
-    // // 모델에 DTO 추가
-    // model.addAttribute("houseList", houseDTOList.get());
-
-    // return "search";
-    // }
-
     // 하우스 상세 조회 페이지(GET)
     @GetMapping("/detail/{house_id}")
     public String getHouseDetail(Model model, @PathVariable("house_id") Long house_id, HttpSession session) {
@@ -154,7 +133,10 @@ public class HouseController {
 
         // 로그인 여부 확인
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        model.addAttribute("isLoggedIn", userEntity != null);
+        if (userEntity != null) {
+            model.addAttribute("isLoggedIn", true);
+            model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
+        }
 
         // 조회하는 유저가 하우스 주인이라면 예약 현황 표시
         if (userEntity != null && userEntity.getId().equals(houseDTO.getOwnerId())) {
@@ -197,6 +179,4 @@ public class HouseController {
         model.addAttribute("redirectUrl", "/mypage_reservation");
         return "alert";
     }
-
-    // TODO: 도로명, 시/도 검색 추가하기
 }
