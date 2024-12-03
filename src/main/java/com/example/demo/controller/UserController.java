@@ -93,6 +93,8 @@ public class UserController {
         if (userEntity != null) {
             model.addAttribute("isLoggedIn", true);
             model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
+        } else {
+            model.addAttribute("isLoggedIn", false);
         }
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
@@ -141,6 +143,8 @@ public class UserController {
         if (userEntity != null) {
             model.addAttribute("isLoggedIn", true);
             model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
+        } else {
+            model.addAttribute("isLoggedIn", false);
         }
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
