@@ -88,9 +88,10 @@
           <h1 class="heading" data-aos="fade-up">
             저렴하게 자취를 시작해보세요
           </h1>
-          <form action="#" class="narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
-            data-aos-delay="200">
-            <input type="text" class="form-control px-4" placeholder="찾고자 하는 하우스의 시/도 또는 도로명을 입력해보세요" />
+          <form action="/search" method="get" class="narrow-w form-search d-flex align-items-stretch mb-3"
+            data-aos="fade-up" data-aos-delay="200">
+            <input type="text" name="keyword" class="form-control px-4"
+              placeholder="찾고자 하는 하우스의 시/도 또는 시/군/구를 입력해보세요" />
             <button type="submit" class="btn btn-primary">search</button>
           </form>
         </div>

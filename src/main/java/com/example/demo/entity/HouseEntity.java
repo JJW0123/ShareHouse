@@ -26,10 +26,10 @@ public class HouseEntity {
     private int person_count;
     private String description;
 
-    private String first_addr;
-    private String second_addr;
-    private String third_addr;
-    private String fourth_addr;
+    private String firstAddr;
+    private String secondAddr;
+    private String thirdAddr;
+    private String fourthAddr;
 
     private String ownerId;
 
@@ -45,10 +45,10 @@ public class HouseEntity {
         houseEntity.person_count = houseDTO.getHousePerson_count();
         houseEntity.description = houseDTO.getHouseDescription();
 
-        houseEntity.first_addr = houseDTO.getFirst_addr();
-        houseEntity.second_addr = houseDTO.getSecond_addr();
-        houseEntity.third_addr = houseDTO.getThird_addr();
-        houseEntity.fourth_addr = houseDTO.getFourth_addr();
+        houseEntity.firstAddr = houseDTO.getFirstAddr();
+        houseEntity.secondAddr = houseDTO.getSecondAddr();
+        houseEntity.thirdAddr = houseDTO.getThirdAddr();
+        houseEntity.fourthAddr = houseDTO.getFourthAddr();
 
         houseEntity.ownerId = houseDTO.getOwnerId();
 

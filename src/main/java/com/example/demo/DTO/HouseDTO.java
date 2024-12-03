@@ -19,10 +19,10 @@ public class HouseDTO {
     private String houseDescription;
 
     // 주소(1.시/도, 2.시/군/구, 3.도로명+건물번호, 4.상세주소)
-    private String first_addr;
-    private String second_addr;
-    private String third_addr;
-    private String fourth_addr;
+    private String firstAddr;
+    private String secondAddr;
+    private String thirdAddr;
+    private String fourthAddr;
 
     // 하우스 이미지 하나(AWS S3 url)
     private String img_url;
@@ -43,10 +43,10 @@ public class HouseDTO {
         houseDTO.setHousePerson_count(houseEntity.getPerson_count());
         houseDTO.setHouseDescription(houseEntity.getDescription());
 
-        houseDTO.setFirst_addr(houseEntity.getFirst_addr());
-        houseDTO.setSecond_addr(houseEntity.getSecond_addr());
-        houseDTO.setThird_addr(houseEntity.getThird_addr());
-        houseDTO.setFourth_addr(houseEntity.getFourth_addr());
+        houseDTO.setFirstAddr(houseEntity.getFirstAddr());
+        houseDTO.setSecondAddr(houseEntity.getSecondAddr());
+        houseDTO.setThirdAddr(houseEntity.getThirdAddr());
+        houseDTO.setFourthAddr(houseEntity.getFourthAddr());
 
         houseDTO.setOwnerId(houseEntity.getOwnerId());
 

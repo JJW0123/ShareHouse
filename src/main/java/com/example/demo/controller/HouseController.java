@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,12 +82,27 @@ public class HouseController {
 
     // 하우스 조회 페이지(GET)
     @GetMapping("/search")
-    public String getHouseInfo(HttpSession session, Model model) {
+    public String search(@RequestParam(value = "keyword", required = false) String keyword, HttpSession session,
+            Model model) {
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
         model.addAttribute("isLoggedIn", userEntity != null);
+        List<HouseDTO> houseDTOList;
+        if (keyword == null || keyword.isEmpty()) {
+            // 데이터베이스에서 모든 하우스 데이터를 가져옴
+            houseDTOList = houseService.getAllHouses();
+        } else {
+            // 데이터베이스에서 키워드로 하우스 데이터를 가져옴
+            Optional<List<HouseDTO>> houseDTOListOptional = houseService.getAllHouseByKeyword(keyword);
 
-        // 데이터베이스에서 모든 하우스 데이터를 가져옴
-        List<HouseDTO> houseDTOList = houseService.getAllHouses();
+            // 키워드에 해당하는 하우스가 없다면 경고창 띄우기
+            if (houseDTOListOptional.isEmpty()) {
+                model.addAttribute("message", "조건에 맞는 하우스가 없습니다.");
+                model.addAttribute("redirectUrl", "/");
+                return "alert";
+            }
+            // 키워드에 해당하는 하우스 가져오기
+            houseDTOList = houseDTOListOptional.get();
+        }
 
         // S3에서 이미지 URL 받아와서 DTO에 넣기
         for (HouseDTO houseDTO : houseDTOList) {
@@ -98,6 +114,34 @@ public class HouseController {
 
         return "search";
     }
+
+    // // 하우스 조회 페이지 - 시/도 또는 도로명 검색(GET)
+    // @GetMapping("/search/{keyword}")
+    // public String searchByKeyword(@PathVariable String keyword, HttpSession
+    // session, Model model) {
+    // UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+    // model.addAttribute("isLoggedIn", userEntity != null);
+
+    // // 데이터베이스에서 키워드로 하우스 데이터를 가져옴
+    // Optional<List<HouseDTO>> houseDTOList =
+    // houseService.getAllHouseByKeyword(keyword);
+
+    // // 키워드에 해당하는 하우스가 없다면 경고창 띄우기
+    // if (houseDTOList.isEmpty()) {
+    // model.addAttribute("message", "조건에 맞는 하우스가 없습니다.");
+    // model.addAttribute("redirectUrl", "/");
+    // return "alert";
+    // }
+    // // S3에서 이미지 URL 받아와서 DTO에 넣기
+    // for (HouseDTO houseDTO : houseDTOList.get()) {
+    // houseDTO.setImg_url(photoService.getPhotoUrl(houseDTO.getHouseId()));
+    // }
+
+    // // 모델에 DTO 추가
+    // model.addAttribute("houseList", houseDTOList.get());
+
+    // return "search";
+    // }
 
     // 하우스 상세 조회 페이지(GET)
     @GetMapping("/detail/{house_id}")

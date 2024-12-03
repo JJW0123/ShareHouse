@@ -36,6 +36,23 @@ public class HouseService {
         return houseDTOs;
     }
 
+    // 특정한 키워드로 하우스 DB 불러오기
+    public Optional<List<HouseDTO>> getAllHouseByKeyword(String keyword) {
+
+        // 시/도 검색
+        List<HouseEntity> houseEntityList = houseRep.findAllByFirstAddr(keyword);
+        if (houseEntityList.isEmpty()) { // 검색결과 없다면
+            // 시/군/구 검색
+            houseEntityList = houseRep.findAllBySecondAddr(keyword);
+        }
+
+        // DTO로 형변환
+        List<HouseDTO> houseDTOs = houseEntityList.stream().map(HouseDTO::toHouseDTO)
+                .collect(Collectors.toList());
+
+        return Optional.ofNullable(houseDTOs);
+    }
+
     // 하나의 하우스 DB 불러오기
     public HouseDTO getOneHouse(Long houseId) {
         HouseEntity houseEntity = houseRep.findById(houseId);

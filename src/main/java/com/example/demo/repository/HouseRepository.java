@@ -12,5 +12,9 @@ public interface HouseRepository extends JpaRepository<HouseEntity, Integer> {
 
     List<HouseEntity> findAllByOwnerId(String ownerId);
 
+    List<HouseEntity> findAllByFirstAddr(String firstAddr);
+
+    List<HouseEntity> findAllBySecondAddr(String secondAddr);
+
     void deleteById(Long id);
 }
