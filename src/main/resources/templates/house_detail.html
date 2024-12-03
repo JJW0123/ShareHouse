@@ -90,7 +90,7 @@
       </div>
     </div>
   </div>
-
+  <!-- 보증금 / 월세 아래쪽 mb-4 간격주기, 글자 크기 키울 수 있으면 키우기-->
   <div class="section">
     <div class="container">
       <div class="row justify-content-between">
@@ -103,13 +103,23 @@
         </div>
         <div class="col-lg-4">
           <h2 class="heading text-primary" th:text="${houseInfo.houseName}"></h2>
-          <h6 class="mb-0"
-            th:text="${'보증금: ' + houseInfo.houseDeposit + '만원 / 월세: ' + houseInfo.houseMonthly_rent + '만원'}"></h6>
-          <p class="meta"
+          <p class="meta fs-5"
             th:text="${houseInfo.first_addr + ' ' + houseInfo.second_addr + ' ' + houseInfo.third_addr + ' ' + houseInfo.fourth_addr}">
           </p>
+          <p class="meta fs-4"
+            th:text="${'보증금 ' + houseInfo.houseDeposit + '만 / 월세 ' + houseInfo.houseMonthly_rent + '만'}"></p>
+          <div class="specs d-flex mb-1">
+          </div>
           <p class="text-black-50" th:text="${houseInfo.houseDescription}">
           </p>
+          <span class="d-block d-flex align-items-center me-3">
+            <span class="icon-home me-2"></span>
+            <span class="caption" th:text="${houseInfo.houseArea + 'm²'}"></span>
+          </span>
+          <span class="d-block d-flex align-items-center">
+            <span class="icon-person me-2"></span>
+            <span class="caption" th:text="${houseInfo.housePerson_count + '명'}"></span>
+          </span>
           <!-- // 시간 남으면 완성하기
           <div class="d-block agent-box p-5">
             <div class="text">

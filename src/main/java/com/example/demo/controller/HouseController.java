@@ -99,8 +99,6 @@ public class HouseController {
         return "search";
     }
 
-    // TODO: 텍스트 디자인 수정하기
-    // TODO: 평수, 인원 표시하기
     // 하우스 상세 조회 페이지(GET)
     @GetMapping("/detail/{house_id}")
     public String getHouseDetail(Model model, @PathVariable("house_id") Long house_id, HttpSession session) {

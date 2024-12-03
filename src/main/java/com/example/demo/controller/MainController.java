@@ -21,7 +21,6 @@ public class MainController {
         UserEntity loginUser = (UserEntity) session.getAttribute("loginUser");
         if (loginUser != null) {
             model.addAttribute("isLoggedIn", true);
-            // TODO: index.html 유저 이름 디자인 수정
             model.addAttribute("userName", loginUser.getName()); // 로그인 사용자 이름
         } else {
             model.addAttribute("isLoggedIn", false);
