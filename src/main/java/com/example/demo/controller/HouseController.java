@@ -168,7 +168,9 @@ public class HouseController {
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
         if (userEntity == null) {
-            return "redirect:/login";
+            model.addAttribute("message", "로그인후 이용해주세요");
+            model.addAttribute("redirectUrl", "/login");
+            return "alert";
         }
 
         // 이미 예약한 하우스가 있다면 예외처리
