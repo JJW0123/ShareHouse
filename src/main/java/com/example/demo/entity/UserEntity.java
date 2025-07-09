@@ -19,6 +19,7 @@ public class UserEntity {
     private String password;
     private String name;
     private String phone;
+    private String role;
 
     @Builder
     public static UserEntity toUserEntity(UserDTO userDTO) {

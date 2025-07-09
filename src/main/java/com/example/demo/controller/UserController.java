@@ -37,22 +37,24 @@ public class UserController {
         return "login";
     }
 
+    // TODO: 필터에서 처리하기
     // 로그인(POST)
-    @PostMapping("/login")
-    public String login(String userId, String userPassword, HttpSession session, Model model) {
-        UserEntity user = userService.login(userId, userPassword);
+    // @PostMapping("/login")
+    // public String login(String userId, String userPassword, HttpSession session,
+    // Model model) {
+    // UserEntity user = userService.login(userId, userPassword);
 
-        // 로그인 실패시 알림 띄우기
-        if (user == null) {
-            model.addAttribute("message", "아이디나 비밀번호가 틀렸습니다.");
-            model.addAttribute("redirectUrl", "/login");
-            return "alert";
-        }
+    // // 로그인 실패시 알림 띄우기
+    // if (user == null) {
+    // model.addAttribute("message", "아이디나 비밀번호가 틀렸습니다.");
+    // model.addAttribute("redirectUrl", "/login");
+    // return "alert";
+    // }
 
-        // 로그인 유저는 세션에 저장
-        session.setAttribute("loginUser", user);
-        return "redirect:/";
-    }
+    // // 로그인 유저는 세션에 저장
+    // session.setAttribute("loginUser", user);
+    // return "redirect:/";
+    // }
 
     // 로그아웃(GET)
     @GetMapping("/logout")
@@ -69,21 +71,24 @@ public class UserController {
 
     // 회원가입(POST)
     @PostMapping("/signup")
-    public String signup(@ModelAttribute UserDTO userDTO, Model model) {
+    public void signup(@ModelAttribute UserDTO userDTO, Model model) {
 
-        // 아이디 중복 예외처리
-        if (userService.checkIdDuplicate(userDTO.getUserId())) {
-            model.addAttribute("message", "이미 존재하는 아이디입니다.");
-            model.addAttribute("redirectUrl", "/signup");
-            return "alert";
-        }
+        userService.joinProcess(userDTO);
 
-        // 예외처리 통과하면 저장
-        userService.save(userDTO);
+        // TODO: jwt 구현하고 세션 삭제하기
+        // // 아이디 중복 예외처리
+        // if (userService.checkIdDuplicate(userDTO.getUserId())) {
+        // model.addAttribute("message", "이미 존재하는 아이디입니다.");
+        // model.addAttribute("redirectUrl", "/signup");
+        // return "alert";
+        // }
 
-        model.addAttribute("message", "회원가입에 성공했습니다.");
-        model.addAttribute("redirectUrl", "/");
-        return "alert";
+        // // 예외처리 통과하면 저장
+        // userService.save(userDTO);
+
+        // model.addAttribute("message", "회원가입에 성공했습니다.");
+        // model.addAttribute("redirectUrl", "/");
+        // return "alert";
     }
 
     // 마이페이지 - 예약한 하우스 조회 페이지(GET)
