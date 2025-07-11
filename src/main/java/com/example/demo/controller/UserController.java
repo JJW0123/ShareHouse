@@ -74,21 +74,6 @@ public class UserController {
     public void signup(@ModelAttribute UserDTO userDTO, Model model) {
 
         userService.joinProcess(userDTO);
-
-        // TODO: jwt 구현하고 세션 삭제하기
-        // // 아이디 중복 예외처리
-        // if (userService.checkIdDuplicate(userDTO.getUserId())) {
-        // model.addAttribute("message", "이미 존재하는 아이디입니다.");
-        // model.addAttribute("redirectUrl", "/signup");
-        // return "alert";
-        // }
-
-        // // 예외처리 통과하면 저장
-        // userService.save(userDTO);
-
-        // model.addAttribute("message", "회원가입에 성공했습니다.");
-        // model.addAttribute("redirectUrl", "/");
-        // return "alert";
     }
 
     // 마이페이지 - 예약한 하우스 조회 페이지(GET)

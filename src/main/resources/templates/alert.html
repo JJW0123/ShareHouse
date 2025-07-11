@@ -9,11 +9,9 @@
 <body>
     <script th:inline="javascript">
 
-        /*<![CDATA[*/
-        var message = [[${ message }]];
+        var message = ('[[${ message }]]');
         alert(message);
-        location.replace([[${ redirectUrl }]]);
-        /*]]>*/
+        location.replace('[[${ redirectUrl }]]');
 
     </script>
 </body>

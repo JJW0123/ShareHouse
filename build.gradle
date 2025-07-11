@@ -39,7 +39,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	// swagger http://localhost:8080/swagger-ui/index.html
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
 
 	// login token
 	implementation 'org.springframework.boot:spring-boot-starter-security'

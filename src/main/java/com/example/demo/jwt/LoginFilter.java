@@ -12,6 +12,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.demo.DTO.CustomUserDetails;
+import com.example.demo.DTO.UserDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,15 +33,24 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
-        // request에서 username, password 받아오기
-        String username = request.getParameter("id");
-        String password = obtainPassword(request);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserDTO userDTO = objectMapper.readValue(request.getInputStream(), UserDTO.class);
 
-        // 받아온 정보를 authenticationManager로 전달
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
-                null);
+            // request에서 username, password 받아오기
+            String username = userDTO.getUserId();
+            String password = userDTO.getUserPassword();
 
-        return authenticationManager.authenticate(authToken);
+            // 받아온 정보를 authenticationManager로 전달
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password,
+                    null);
+
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // TODO: 없는 아이디일 경우 null 리턴되는거 예외처리하기
+        return null;
     }
 
     // 로그인 성공 메소드
@@ -60,7 +71,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
+        String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L);
 
         response.addHeader("Authorization", "Bearer " + token);
     }
