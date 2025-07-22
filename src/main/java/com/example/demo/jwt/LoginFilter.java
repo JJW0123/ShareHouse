@@ -1,6 +1,7 @@
 package com.example.demo.jwt;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -14,6 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.example.demo.DTO.CustomUserDetails;
 import com.example.demo.DTO.UserDTO;
+import com.example.demo.entity.RefreshEntity;
+import com.example.demo.repository.RefreshRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;
@@ -30,6 +33,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -79,10 +83,25 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access", userId, username, role, 10 * 60 * 1000L);
         String refresh = jwtUtil.createJwt("refresh", userId, username, role, 24 * 60 * 60 * 1000L);
 
+        addRefreshEntity(username, refresh, 24 * 60 * 60 * 1000L);
+
         // 응답 설정
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
+    }
+
+    // DB에 refresh token 저장
+    private void addRefreshEntity(String username, String refresh, Long expiredMs) {
+
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        RefreshEntity refreshEntity = new RefreshEntity();
+        refreshEntity.setUsername(username);
+        refreshEntity.setRefresh(refresh);
+        refreshEntity.setExpiration(date.toString());
+
+        refreshRepository.save(refreshEntity);
     }
 
     private Cookie createCookie(String key, String value) {

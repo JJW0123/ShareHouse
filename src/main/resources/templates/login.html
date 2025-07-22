@@ -150,14 +150,14 @@
   <script src="js/navbar.js"></script>
   <script src="js/counter.js"></script>
   <script src="js/custom.js"></script>
-  <!-- 폼 로그인 방식에서 jwt로 변경하기 -->
-
   <script>
     const form = document.getElementById("login");
 
     form.addEventListener("submit", async (e) => {
+      // 폼 동작 중지
       e.preventDefault();
 
+      // input 필드에서 값 받아오기
       const username = document.getElementById("userId").value;
       const password = document.getElementById("userPassword").value;
 

@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.example.demo.jwt.JWTFilter;
 import com.example.demo.jwt.JWTUtil;
 import com.example.demo.jwt.LoginFilter;
+import com.example.demo.repository.RefreshRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +22,10 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -49,8 +52,8 @@ public class SecurityConfig {
         // 경로별 인가 처리
         http.authorizeHttpRequests(auth -> auth
                 // TODO: 리소스가 안 불러와지니 리소스 경로는 풀어두기
-                .requestMatchers("/**", "/join", "/login").permitAll() // jwt 없이 접근가능
-                .requestMatchers("/admin").hasRole("ADMIN") // ADMIN만 "/admin"에 접근가능
+                .requestMatchers("/**", "/join", "/login", "/reissue").permitAll() // jwt 없이 접근가능
+                // .requestMatchers("/admin").hasRole("ADMIN") // ADMIN만 "/admin"에 접근가능
                 .anyRequest().authenticated()); // 그외에는 jwt 있어야 접근가능
 
         // LoginFilter 앞에 JWTFilter 필터 넣기
@@ -58,7 +61,7 @@ public class SecurityConfig {
 
         // UsernamePasswordAuthenticationFilter 필터 자리에 커스텀 필터 넣기
         http.addFilterAt(new LoginFilter(authenticationManager(
-                authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
         // 세션 설정(STATELESS)
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
