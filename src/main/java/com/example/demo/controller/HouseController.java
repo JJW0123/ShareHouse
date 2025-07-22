@@ -16,18 +16,23 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.DTO.HouseDTO;
 import com.example.demo.DTO.ReservationDTO;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.jwt.JWTUtil;
 import com.example.demo.service.AwsS3Service;
 import com.example.demo.service.HouseService;
 import com.example.demo.service.PhotoService;
 import com.example.demo.service.ReservationService;
 import com.example.demo.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 // url requestMapping 추가 시 css 파일 경로를 thymeleaf 상대경로로 바꿔주기
 @Controller
 @RequiredArgsConstructor
+@Tag(name = "하우스", description = "하우스 등록 및 조회 관련 API")
 public class HouseController {
 
     private final HouseService houseService;
@@ -35,6 +40,7 @@ public class HouseController {
     private final AwsS3Service awsS3Service;
     private final UserService userService;
     private final ReservationService reservationService;
+    private final JWTUtil jwtUtil;
 
     // 하우스 등록 페이지(GET)
     @GetMapping("/register")
@@ -57,16 +63,23 @@ public class HouseController {
     }
 
     // 하우스 등록(POST)
+    @Operation(summary = "하우스 등록", description = "하우스를 웹페이지에 등록합니다.")
     @PostMapping("/register")
     public String registerHouse(
             @ModelAttribute HouseDTO houseDTO,
-            @RequestParam("housePhoto") List<MultipartFile> housePhoto,
+            @RequestParam List<MultipartFile> housePhoto,
+            HttpServletRequest request,
             HttpSession session,
+
             Model model) {
+        // 세션 -> json 변경
+
+        String authorization = request.getHeader("Authorization");
+
+        String userId = jwtUtil.getId(authorization.split(" ")[1]);
 
         // 세션에서 id 받아와 하우스 주인으로 저장
-        UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        houseDTO.setOwnerId(userEntity.getId());
+        houseDTO.setOwnerId(userId);
 
         // 하우스DTO 저장하고 id 반환
         Long houseId = houseService.save(houseDTO);
@@ -83,11 +96,31 @@ public class HouseController {
         model.addAttribute("message", "성공적으로 등록 되었습니다.");
         model.addAttribute("redirectUrl", "/mypage_registration");
         return "alert";
+
+        // // 세션에서 id 받아와 하우스 주인으로 저장
+        // UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
+        // houseDTO.setOwnerId(userEntity.getId());
+
+        // // 하우스DTO 저장하고 id 반환
+        // Long houseId = houseService.save(houseDTO);
+
+        // // 이미지를 AWS S3에 업로드하고 파일 Url을 리스트로 반환
+        // List<String> fileUrlList = awsS3Service.uploadFiles(housePhoto);
+
+        // // 파일 Url과 하우스 id 저장
+        // for (String fileUrl : fileUrlList) {
+        // photoService.save(fileUrl, houseId);
+        // }
+
+        // // 등록 성공 메세지 띄우고 마이페이지 - 등록한 하우스로 리다이렉트
+        // model.addAttribute("message", "성공적으로 등록 되었습니다.");
+        // model.addAttribute("redirectUrl", "/mypage_registration");
+        // return "alert";
     }
 
     // 하우스 조회 페이지(GET)
     @GetMapping("/search")
-    public String search(@RequestParam(value = "keyword", required = false) String keyword, HttpSession session,
+    public String search(@RequestParam(required = false) String keyword, HttpSession session,
             Model model) {
         UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
         if (userEntity != null) {
@@ -128,7 +161,7 @@ public class HouseController {
 
     // 하우스 상세 조회 페이지(GET)
     @GetMapping("/detail/{house_id}")
-    public String getHouseDetail(Model model, @PathVariable("house_id") Long house_id, HttpSession session) {
+    public String getHouseDetail(Model model, @PathVariable Long house_id, HttpSession session) {
 
         // 하우스 정보 받아오기
         HouseDTO houseDTO = houseService.getOneHouse(house_id);
@@ -160,7 +193,7 @@ public class HouseController {
     // 하우스 예약(POST)
     @PostMapping("/reserve")
     public String reserveHouse(
-            @RequestParam("houseId") Long houseId,
+            @RequestParam Long houseId,
             HttpSession session,
             Model model) {
 

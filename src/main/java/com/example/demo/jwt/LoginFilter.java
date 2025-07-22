@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +65,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // username
         String username = customUserDetails.getUsername();
+        // userId
+        String userId = customUserDetails.getUserId();
 
         // collection을 Iterator로 순회해서 role 가져오기
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -71,10 +75,24 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L);
+        // access, refresh 토큰 생성
+        String access = jwtUtil.createJwt("access", userId, username, role, 10 * 60 * 1000L);
+        String refresh = jwtUtil.createJwt("refresh", userId, username, role, 24 * 60 * 60 * 1000L);
 
-        response.addHeader("Authorization", "Bearer " + token);
+        // 응답 설정
+        response.setHeader("access", access);
+        response.addCookie(createCookie("refresh", refresh));
+        response.setStatus(HttpStatus.OK.value());
     }
+
+    private Cookie createCookie(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24 * 60 * 60);
+        cookie.setHttpOnly(true);
+        return cookie;
+    }
+
+    // 로그인시 로컬 스토리지에서 jwt 받은다음 로그인 메뉴(등록 하우스 조회, 예약하우스 조회, 예약 등등) 사용 가능 하도록 할 것
 
     // 로그인 실패 메소드
     @Override

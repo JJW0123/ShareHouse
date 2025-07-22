@@ -19,12 +19,15 @@ import com.example.demo.service.PhotoService;
 import com.example.demo.service.ReservationService;
 import com.example.demo.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 // 로그인과 마이페이지의 기능을 담당하는 컨트롤러
 @Controller
 @RequiredArgsConstructor
+@Tag(name = "사용자", description = "로그인 및 마이페이지 관련 API")
 public class UserController {
     private final UserService userService;
     private final HouseService houseService;
@@ -36,25 +39,6 @@ public class UserController {
     public String login() {
         return "login";
     }
-
-    // TODO: 필터에서 처리하기
-    // 로그인(POST)
-    // @PostMapping("/login")
-    // public String login(String userId, String userPassword, HttpSession session,
-    // Model model) {
-    // UserEntity user = userService.login(userId, userPassword);
-
-    // // 로그인 실패시 알림 띄우기
-    // if (user == null) {
-    // model.addAttribute("message", "아이디나 비밀번호가 틀렸습니다.");
-    // model.addAttribute("redirectUrl", "/login");
-    // return "alert";
-    // }
-
-    // // 로그인 유저는 세션에 저장
-    // session.setAttribute("loginUser", user);
-    // return "redirect:/";
-    // }
 
     // 로그아웃(GET)
     @GetMapping("/logout")
@@ -70,8 +54,9 @@ public class UserController {
     }
 
     // 회원가입(POST)
+    @Operation(summary = "회원가입", description = "")
     @PostMapping("/signup")
-    public void signup(@ModelAttribute UserDTO userDTO, Model model) {
+    public void signup(@ModelAttribute UserDTO userDTO) {
 
         userService.joinProcess(userDTO);
     }
@@ -164,7 +149,7 @@ public class UserController {
 
     // 마이페이지 - 등록 취소
     @GetMapping("/cancelRegistration/{houseId}")
-    public String cancelRegistration(@PathVariable("houseId") Long houseId, Model model) {
+    public String cancelRegistration(@PathVariable Long houseId, Model model) {
         houseService.delete(houseId);
 
         model.addAttribute("message", "하우스 등록을 취소했습니다.");
