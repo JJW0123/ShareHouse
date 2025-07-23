@@ -15,6 +15,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+// TODO: 로그아웃 연동하기
 public class CustomLogoutFilter extends GenericFilterBean {
 
     private final JWTUtil jwtUtil;
@@ -98,6 +99,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         // 로그아웃 진행
         // Refresh 토큰 DB에서 제거
+        // TODO: 로그아웃 안 누르고 종료한다면 DB에 쌓임
         refreshRepository.deleteByRefresh(refresh);
 
         // Refresh 토큰 Cookie 값 초기화

@@ -52,7 +52,7 @@
                 <a href="#">반갑습니다, <span id="userNameSpan"></span>님</a>
                 <a href="#" onclick="logout(); return false;">로그아웃</a>
               </div>
-              <div id="loggedOutSection" style="display: none;">
+              <div id="loggedOutSection" style="display: block;">
                 <a href="/login">로그인</a>
                 <a href="/signup">회원가입</a>
               </div>
@@ -144,7 +144,31 @@
   <script src="js/navbar.js"></script>
   <script src="js/counter.js"></script>
   <script src="js/custom.js"></script>
-  <script src="js/auth.js"></script>
+  <script>
+    const token = localStorage.getItem("accessToken");
+
+    fetch("/user-info", {
+      method: "GET",
+      headers: {
+        "accessToken": token
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("인증 실패");
+        return res.json();
+      })
+      .then(data => {
+        document.getElementById("loggedInSection").style.display = "block";
+        document.getElementById("loggedOutSection").style.display = "none";
+        document.getElementById("userNameSpan").innerText = data.username;
+      })
+      .catch(err => {
+        document.getElementById("loggedInSection").style.display = "none";
+        document.getElementById("loggedOutSection").style.display = "block";
+        console.error(err);
+        // TODO: 로그인 페이지로 리다이렉트 예외처리하기
+      });
+  </script>
 </body>
 
 </html>

@@ -174,8 +174,13 @@
         body: JSON.stringify(userDTO)
       });
 
-      const token = response.headers.get("Authorization");
-      localStorage.setItem("token", token);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+
+      const accessToken = response.headers.get("access");
+      localStorage.setItem("accessToken", accessToken);
       window.location.href = "/";
     });
   </script>

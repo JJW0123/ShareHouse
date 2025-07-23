@@ -1,8 +1,12 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,7 @@ import com.example.demo.DTO.HouseDTO;
 import com.example.demo.DTO.UserDTO;
 import com.example.demo.entity.ReservationEntity;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.jwt.JWTUtil;
 import com.example.demo.service.HouseService;
 import com.example.demo.service.PhotoService;
 import com.example.demo.service.ReservationService;
@@ -21,6 +26,7 @@ import com.example.demo.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +39,7 @@ public class UserController {
     private final HouseService houseService;
     private final PhotoService photoService;
     private final ReservationService reservationService;
+    private final JWTUtil jwtUtil;
 
     // 로그인 페이지(GET)
     @GetMapping("/login")
@@ -155,5 +162,23 @@ public class UserController {
         model.addAttribute("message", "하우스 등록을 취소했습니다.");
         model.addAttribute("redirectUrl", "/");
         return "alert";
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<Map<String, String>> getUserInfo(HttpServletRequest request) {
+        String accessToken = request.getHeader("accessToken");
+
+        if (accessToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = jwtUtil.getName(accessToken);
+        String userId = jwtUtil.getId(accessToken);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("username", username);
+        response.put("userId", userId);
+
+        return ResponseEntity.ok(response);
     }
 }
