@@ -44,7 +44,7 @@ public class UserController {
     // 로그인 페이지(GET)
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "/login.html";
     }
 
     // 로그아웃(GET)
@@ -61,11 +61,11 @@ public class UserController {
     }
 
     // 회원가입(POST)
-    @Operation(summary = "회원가입", description = "")
+    @Operation(summary = "회원가입")
     @PostMapping("/signup")
-    public void signup(@ModelAttribute UserDTO userDTO) {
-
+    public ResponseEntity<Void> signup(@ModelAttribute UserDTO userDTO) {
         userService.joinProcess(userDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // 마이페이지 - 예약한 하우스 조회 페이지(GET)

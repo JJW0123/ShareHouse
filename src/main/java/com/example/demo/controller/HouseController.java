@@ -29,7 +29,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-// url requestMapping 추가 시 css 파일 경로를 thymeleaf 상대경로로 바꿔주기
 @Controller
 @RequiredArgsConstructor
 @Tag(name = "하우스", description = "하우스 등록 및 조회 관련 API")
@@ -44,22 +43,15 @@ public class HouseController {
 
     // 하우스 등록 페이지(GET)
     @GetMapping("/register")
-    public String register(HttpSession session, Model model) {
-
-        UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        if (userEntity != null) {
-            model.addAttribute("isLoggedIn", true);
-            model.addAttribute("userName", userEntity.getName()); // 로그인 사용자 이름
-        } else {
-            model.addAttribute("isLoggedIn", false);
-        }
+    public String register(HttpServletRequest request) {
+        String accessToken = request.getHeader("accessToken");
 
         // 로그인하지 않은 상태라면 로그인 페이지로 이동
-        if (userEntity == null) {
-            return "redirect:/login";
+        if (accessToken == null) {
+            return "/login.html";
         }
 
-        return "register";
+        return "/register.html";
     }
 
     // 하우스 등록(POST)
@@ -70,7 +62,6 @@ public class HouseController {
             @RequestParam List<MultipartFile> housePhoto,
             HttpServletRequest request,
             HttpSession session,
-
             Model model) {
         // 세션 -> json 변경
 
@@ -96,26 +87,6 @@ public class HouseController {
         model.addAttribute("message", "성공적으로 등록 되었습니다.");
         model.addAttribute("redirectUrl", "/mypage_registration");
         return "alert";
-
-        // // 세션에서 id 받아와 하우스 주인으로 저장
-        // UserEntity userEntity = (UserEntity) session.getAttribute("loginUser");
-        // houseDTO.setOwnerId(userEntity.getId());
-
-        // // 하우스DTO 저장하고 id 반환
-        // Long houseId = houseService.save(houseDTO);
-
-        // // 이미지를 AWS S3에 업로드하고 파일 Url을 리스트로 반환
-        // List<String> fileUrlList = awsS3Service.uploadFiles(housePhoto);
-
-        // // 파일 Url과 하우스 id 저장
-        // for (String fileUrl : fileUrlList) {
-        // photoService.save(fileUrl, houseId);
-        // }
-
-        // // 등록 성공 메세지 띄우고 마이페이지 - 등록한 하우스로 리다이렉트
-        // model.addAttribute("message", "성공적으로 등록 되었습니다.");
-        // model.addAttribute("redirectUrl", "/mypage_registration");
-        // return "alert";
     }
 
     // 하우스 조회 페이지(GET)

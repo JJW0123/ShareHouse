@@ -27,7 +27,9 @@
   <link rel="stylesheet" href="css/aos.css" />
   <link rel="stylesheet" href="css/style.css" />
 
-  <title>쉐어하우스</title>
+  <title>
+    쉐어하우스
+  </title>
 </head>
 
 <body>
@@ -48,11 +50,11 @@
 
           <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
             <div id="userSection" class="mb-3">
-              <div id="loggedInSection" style="display: none;">
+              <div id="loggedInSection">
                 <a href="#">반갑습니다, <span id="userNameSpan"></span>님</a>
                 <a href="#" onclick="logout(); return false;">로그아웃</a>
               </div>
-              <div id="loggedOutSection" style="display: block;">
+              <div id="loggedOutSection">
                 <a href="/login">로그인</a>
                 <a href="/signup">회원가입</a>
               </div>
@@ -79,29 +81,92 @@
     </div>
   </nav>
 
-  <div class="hero">
-    <div class="hero-slide">
-      <div class="img overlay" style="background-image: url('images/hero_bg_1.jpg')"></div>
-    </div>
-
+  <div class="hero hero-smaller overlay" style="background-image: url('images/hero_bg_1.jpg')">
     <div class="container">
       <div class="row justify-content-center align-items-center">
-        <div class="col-lg-9 text-center">
-          <h1 class="heading" data-aos="fade-up">
-            저렴하게 자취를 시작해보세요
-          </h1>
-          <form action="/search" method="get" class="narrow-w form-search d-flex align-items-stretch mb-3"
-            data-aos="fade-up" data-aos-delay="200">
-            <input type="text" name="keyword" class="form-control px-4"
-              placeholder="찾고자 하는 하우스의 시/도 또는 시/군/구를 입력해보세요" />
-            <button type="submit" class="btn btn-primary">search</button>
-          </form>
+        <div class="col-lg-9 text-center mt-5">
+          <h1 class="heading" data-aos="fade-up">하우스 등록</h1>
         </div>
       </div>
     </div>
   </div>
 
-
+  <div class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+          <form action="/register" method="post" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-lg-12">
+                <h2 class="font-weight-bold text-primary heading">
+                  주소
+                </h2>
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name=firstAddr class="form-control" placeholder="시/도" />
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name=secondAddr class="form-control" placeholder="시/군/구" />
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name=thirdAddr class="form-control" placeholder="도로명 + 건물번호" />
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name=fourthAddr class="form-control" placeholder="상세주소" />
+              </div>
+              <div class="col-lg-12">
+                <h2 class="font-weight-bold text-primary heading">
+                  건물 정보
+                </h2>
+              </div>
+              <div class="col-12 mb-3">
+                <input type="text" name="houseName" class="form-control" placeholder="건물명" />
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name="houseArea" class="form-control" placeholder="평수(m²)" />
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name="housePerson_count" class="form-control" placeholder="입주 인원(최대)" />
+              </div>
+              <div class="col-lg-12">
+                <h2 class="font-weight-bold text-primary heading">
+                  금액
+                </h2>
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name="houseDeposit" class="form-control" placeholder="보증금(만원)" />
+              </div>
+              <div class="col-6 mb-3">
+                <input type="text" name="houseMonthly_rent" class="form-control" placeholder="월세(만원)" />
+              </div>
+              <div class="col-lg-12">
+                <h2 class="font-weight-bold text-primary heading">
+                  기타 설명
+                </h2>
+              </div>
+              <div class="col-12 mb-3">
+                <textarea name="houseDescription" cols="30" rows="7" class="form-control"
+                  placeholder="기타 설명"></textarea>
+              </div>
+              <div class="col-lg-12">
+                <h2 class="font-weight-bold text-primary heading">
+                  사진
+                </h2>
+              </div>
+              <div>
+                <input type="file" name="housePhoto" multiple />
+                <h2></h2>
+              </div>
+              <div class="col-12">
+                <input type="submit" value="등록하기" class="btn btn-primary" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.untree_co-section -->
 
   <div class="site-footer">
     <div class="container">
@@ -144,7 +209,7 @@
   <script src="js/navbar.js"></script>
   <script src="js/counter.js"></script>
   <script src="js/custom.js"></script>
-  <script src="js/"></script>
+  <script src="js/auth.js"></script>
 </body>
 
 </html>

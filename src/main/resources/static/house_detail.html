@@ -1,0 +1,305 @@
+<!-- /*
+* Template Name: Property
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Untree.co" />
+  <link rel="shortcut icon" href="/favicon02.png" />
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap5" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+
+  <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+  <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
+
+  <link rel="stylesheet" href="/css/tiny-slider.css" />
+  <link rel="stylesheet" href="/css/aos.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+    쉐어하우스
+  </title>
+</head>
+
+<body>
+  <div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
+  <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="/" class="logo m-0 float-start">Share House</a>
+
+          <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
+            <div id="userSection" class="mb-3">
+              <div id="loggedInSection" style="display: none;">
+                <a href="#">반갑습니다, <span id="userNameSpan"></span>님</a>
+                <!-- TODO: return false 왜 드가는지? -->
+                <a href="#" onclick="logout(); return false;">로그아웃</a>
+              </div>
+              <div id="loggedOutSection" style="display: none;">
+                <a href="/login">로그인</a>
+                <a href="/signup">회원가입</a>
+              </div>
+            </div>
+            <li class="active"><a href="/">메인화면</a></li>
+            <li><a href="/register">쉐어하우스 등록</a></li>
+            <li><a href="/search">쉐어하우스 조회</a></li>
+            <li class="has-children">
+              <a href="#">마이페이지</a>
+              <ul class="dropdown">
+                <li><a href="/mypage_registration">등록한 쉐어하우스</a></li>
+                <li><a href="/mypage_reservation">예약한 쉐어하우스</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <a href="#"
+            class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+            data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero hero-smaller overlay" id="heroSection">
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-lg-9 text-center mt-5">
+          <h1 class="heading" data-aos="fade-up" id="houseNameHeading"></h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 보증금 / 월세 아래쪽 mb-4 간격주기, 글자 크기 키울 수 있으면 키우기-->
+  <div class="section">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-7">
+          <div class="img-property-slide-wrap">
+            <div class="img-property-slide" id="imageSlideContainer">
+              <!-- 이미지는 JavaScript로 동적 추가됨 -->
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <h2 class="heading text-primary" id="houseName"></h2>
+          <p class="meta fs-5" id="houseAddress"></p>
+          <p class="meta fs-4" id="housePrice"></p>
+          <div class="specs d-flex mb-1">
+          </div>
+          <p class="text-black-50" id="houseDescription"></p>
+          <span class="d-block d-flex align-items-center me-3">
+            <span class="icon-home me-2"></span>
+            <span class="caption" id="houseArea"></span>
+          </span>
+          <span class="d-block d-flex align-items-center">
+            <span class="icon-person me-2"></span>
+            <span class="caption" id="housePerson"></span>
+          </span>
+          <!-- // 시간 남으면 완성하기
+          <div class="d-block agent-box p-5">
+            <div class="text">
+              <h3 class="mb-0">123</h3>
+              <div class="meta mb-3">456</div>
+              <p>
+                지도 api
+              </p>
+            </div>
+          </div>
+          -->
+          <button onclick="reserveHouse()" class="btn btn-primary py-2 px-5 mt-3">예약하기</button>
+
+          <div id="reservationSection" style="display: none;">
+            <h2 class="heading text-primary mt-5">하우스 예약 현황</h2>
+            <div id="reservationList">
+              <!-- 예약 정보는 JavaScript로 동적 추가됨 -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="container">
+      <!-- /.row -->
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <!-- 
+              **==========
+              NOTE: 
+              Please don't remove this copyright link unless you buy the license here https://untree.co/license/  
+              **==========
+            -->
+
+          <p>
+            Copyright &copy;
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+            . All Rights Reserved. &mdash; Designed with love by
+            <a href="https://untree.co">Untree.co</a>
+            <!-- License information: https://untree.co/license/ -->
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.site-footer -->
+
+  <!-- Preloader -->
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/tiny-slider.js"></script>
+  <script src="/js/aos.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/counter.js"></script>
+  <script src="/js/custom.js"></script>
+  <script src="/js/auth.js"></script>
+
+  <script>
+    let houseId;
+
+    async function loadHouseDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      houseId = urlParams.get('id');
+
+      try {
+        const response = await fetch(`/api/houses/${houseId}`, {
+          headers: {
+            'Authorization': localStorage.getItem('token')
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to load house details');
+
+        const houseInfo = await response.json();
+
+        // 배경 이미지 설정
+        document.getElementById('heroSection').style.backgroundImage = `url(${houseInfo.img_url_list[0]})`;
+
+        // 기본 정보 설정
+        document.getElementById('houseNameHeading').textContent = houseInfo.houseName;
+        document.getElementById('houseName').textContent = houseInfo.houseName;
+        document.getElementById('houseAddress').textContent =
+          `${houseInfo.firstAddr} ${houseInfo.secondAddr} ${houseInfo.thirdAddr} ${houseInfo.fourthAddr}`;
+        document.getElementById('housePrice').textContent =
+          `보증금 ${houseInfo.houseDeposit}만 / 월세 ${houseInfo.houseMonthly_rent}만`;
+        document.getElementById('houseDescription').textContent = houseInfo.houseDescription;
+        document.getElementById('houseArea').textContent = `${houseInfo.houseArea}m²`;
+        document.getElementById('housePerson').textContent = `${houseInfo.housePerson_count}명`;
+
+        // 이미지 슬라이드 설정
+        const slideContainer = document.getElementById('imageSlideContainer');
+        houseInfo.img_url_list.forEach(url => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = 'House Image';
+          img.className = 'img-fluid';
+          slideContainer.appendChild(img);
+        });
+
+        // 예약 현황 로드
+        if (houseInfo.isOwner) {
+          loadReservations();
+        }
+
+      } catch (error) {
+        console.error('Error loading house details:', error);
+      }
+    }
+
+    async function loadReservations() {
+      try {
+        const response = await fetch(`/api/houses/${houseId}/reservations`, {
+          headers: {
+            'Authorization': localStorage.getItem('token')
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to load reservations');
+
+        const reservations = await response.json();
+        const reservationList = document.getElementById('reservationList');
+        document.getElementById('reservationSection').style.display = 'block';
+
+        reservations.forEach(reservation => {
+          const div = document.createElement('div');
+          div.className = 'd-block agent-box p-3';
+          div.innerHTML = `
+            <p>예약 유저 이름: ${reservation.userName}</p>
+            <p>예약 일시: ${reservation.reservationDate}</p>
+            <p>예약 유저 핸드폰 번호: ${reservation.userPhone}</p>
+          `;
+          reservationList.appendChild(div);
+        });
+      } catch (error) {
+        console.error('Error loading reservations:', error);
+      }
+    }
+
+    async function reserveHouse() {
+      if (!requireAuth()) return;  // 로그인 체크
+
+      try {
+        const response = await fetch('/api/houses/reserve', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+          },
+          body: JSON.stringify({ houseId })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('예약이 완료되었습니다.');
+          window.location.href = '/mypage_reservation';
+        } else {
+          alert(result.message || '예약에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error('Error reserving house:', error);
+        alert('예약 처리 중 오류가 발생했습니다.');
+      }
+    }
+
+    // 페이지 로드 시 실행
+    document.addEventListener('DOMContentLoaded', function () {
+      loadHouseDetails();
+    });
+  </script>
+</body>
+
+</html>
