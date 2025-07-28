@@ -156,12 +156,10 @@ public class UserController {
 
     // 마이페이지 - 등록 취소
     @GetMapping("/cancelRegistration/{houseId}")
-    public String cancelRegistration(@PathVariable Long houseId, Model model) {
+    public ResponseEntity<String> cancelRegistration(@PathVariable Long houseId, Model model) {
         houseService.delete(houseId);
 
-        model.addAttribute("message", "하우스 등록을 취소했습니다.");
-        model.addAttribute("redirectUrl", "/");
-        return "alert";
+        return ResponseEntity.ok("delete house by house_id");
     }
 
     @GetMapping("/user-info")
